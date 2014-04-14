@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+
+'use strict';
+
+process.title = 'ttembed-js';
+
+var ttembed = require('ttembed-js'),
+    getopt = require('posix-getopt');
+
+var config = {};
+
+var parser, option;
+parser = new getopt.BasicParser(':nh(help)', process.argv);
+while ((option = parser.getopt()) !== undefined && ! option.error) {
+    switch(option.option) {
+    case 'n':
+        config.dryRun = true;
+        break;
+    case 'h':
+        console.log('Usage: ttembed-js [OPTION] FILE\n' +
+                    'Remove embedding limitations from a Truetype font file.\n\n' +
+                    '  -n                           dry run; don\'t modify the file\n' +
+                    '  -h, --help                   display this help and exit');
+        process.exit(0);
+    }
+}
+if (parser.optind() >= process.argv.length) {
+    console.error('ttembed-js: missing file operand\nTry \'ttembed-js --help\' for more information.');
+    process.exit(1);
+}
+config.filename = process.argv[parser.optind()];
+
+
+ttembed(config, function(error, fsType) {
+    if (error) {
+        console.error('ttembed-js: ' + (typeof error === 'object' && error.message || error));
+        process.exit(1);
+    }
+    if (config.dryRun) {
+        if (fsType === '0000') {
+            console.log('fsType is 0000; no action will be taken if run without -n.');
+        } else {
+            console.log('fsType is ' + fsType + '; running again without -n will modify the file.');
+        }
+    } else {   
+        if (fsType === '0000') {
+            console.log('fsType is already 0000; no action taken.');
+        } else {
+            console.log('fsType successfully changed from ' + fsType + ' to 0000.');
+        }
+    }
+});

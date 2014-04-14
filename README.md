@@ -17,12 +17,25 @@ All versions of this code so far are public domain. Use at your own risk...
 Installation
 --------------
 
-Install via npm:
+Install globally via npm:
 
-    $ npm install ttembed-js 
+    npm install -g ttembed-js 
 
-Usage
------
+
+Usage (CLI)
+-----------
+
+Command line interface is similar to Paul Flo Williams's version, except only one file argument is permitted.
+
+    Usage: ttembed-js [OPTION] FILE
+    Remove embedding limitations from a Truetype font file.
+
+      -n                           dry run; don't modify the file
+      -h, --help                   display this help and exit
+
+
+Usage (module)
+--------------
 
 By default, ttembed modifies the specified file, switching it to Installable Embedding mode.
 
@@ -37,9 +50,9 @@ ttembed({
         return;
     }
     if (oldFsType === '0000') {
-        console.log('fsType was already 0000; no action taken.');
+        console.log('fsType is already 0000; no action taken.');
     } else {
-        console.log('Successfully changed fsType from ' + oldFsType + ' to 0000.');
+        console.log('fsType successfully changed from ' + oldFsType + ' to 0000.');
     }
 });
 ```
@@ -60,7 +73,7 @@ ttembed({
     if (fsType === '0000') {
         console.log('fsType is 0000; no action will be taken if run with {dryRun: false}.');
     } else {
-        console.log('Current fsType is ' + fsType + '; running again with {dryRun: false} will modify the file.');
+        console.log('fsType is ' + fsType + '; running again with {dryRun: false} will modify the file.');
     }
 });
 ```

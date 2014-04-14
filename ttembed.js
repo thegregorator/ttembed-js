@@ -15,11 +15,11 @@ readbe32 = function(fd) {
 getByte = function(fd) {
     var buffer = new Buffer(1);
     var bytesRead = fs.readSync(fd, buffer, 0, buffer.length, null);
-    return bytesRead === 0 ? -1 : buffer.readUInt8(0)
+    return bytesRead === 0 ? -1 : buffer.readUInt8(0);
 };
 putByte = function(fd, b) {
     var buffer = new Buffer([b]);
-    fs.writeSync(fd, buffer, 0, buffer.length, null)
+    fs.writeSync(fd, buffer, 0, buffer.length, null);
 };
 ftell = function(fd) {
     return fs.seekSync(fd, 0, SEEK_CUR);
@@ -33,7 +33,8 @@ module.exports = function ttembed(config, callback) {
 
         var oldFsTypeString;
 
-        var x, type;
+        var x;
+        var type = new Buffer(4);
         
         var ftype = readbe32(fd);
         if (ftype !== 0x00010000 && ftype !== 0x4f54544f) {
@@ -43,14 +44,12 @@ module.exports = function ttembed(config, callback) {
         try {
             fs.seekSync(fd, 12, 0);
             for (;;) {
-                type = new Buffer(4);
                 for (x=0; x<4; x++) {
                     if (-1 === (type[x] = getByte(fd))) {
-                        throw new MalformedTTFError();
+                        throw new MalformedTTFError(); 
                     }
                 }
-                type = type.toString();
-                if (type === 'OS/2') {
+                if (type.toString() === 'OS/2') {
                     var length;
                     var loc, fstype, oldfstype, sum=0;
                     loc = ftell(fd); /* location for checksum */
@@ -65,7 +64,7 @@ module.exports = function ttembed(config, callback) {
                     } else {
                         oldFsTypeString = ('0000' + oldfstype.toString(16)).slice(-4);
                         if (! config.dryRun) {
-                            fs.seekSync(fd, fstype + 8, SEEK_SET)
+                            fs.seekSync(fd, fstype + 8, SEEK_SET);
                             putByte(fd, 0);
                             putByte(fd, 0);
                             fs.seekSync(fd, fstype, SEEK_SET);
