@@ -18,7 +18,7 @@
     "ttembed-js": "bin/ttembed-js"
   },
   "dependencies": {
-    "fs-ext": "0.4.5",
+    "fs-ext": "0.5.0",
     "posix-getopt": "1.0.0"
   }
 }
