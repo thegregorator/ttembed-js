@@ -1,6 +1,6 @@
 {
   "name": "ttembed-js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Set embedding level of TrueType fonts to 'installable embedding allowed'",
   "main": "ttembed.js",
   "keywords": [
